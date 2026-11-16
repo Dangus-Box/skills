@@ -84,18 +84,22 @@ thread when it needs its own worktree, a different agent family, or must outlive
 Every brief is self-contained, because a child sees none of your history:
 
 - **Target:** the issue number(s); tell it to read the issue, the issues it cites as "Decided
-  in", CONTEXT.md and the relevant ADRs.
+  in", the glossary and the relevant ADRs. The glossary is `GLOSSARY.md` (`GLOSSARY-MAP.md`
+  points to one per context when there are several), or `CONTEXT.md` in repos on the older
+  convention; read whichever exists.
 - **Change:** what to build plus every acceptance criterion. Paste the triage "Agent brief"
   if there is one, never whole issue threads.
 - **Constraints:** glossary vocabulary, ADRs, AGENTS.md language rules, the ticket's scope.
 - **Ownership:** its own worktree and branch; one PR against `main` with `Closes #<n>`.
-- **Observable acceptance:** tests and the project's check commands pass; report the PR link.
+- **Observable acceptance:** the tests the change affects and the project's check commands
+  pass; the full suite runs on the PR (section 5); report the PR link.
 - **Answer shape:** a few lines back, detail in a file.
 
 ## 4. Coordinating
 
 **Setup**
-1. Read AGENTS.md, CONTEXT.md, docs/adr/ and docs/agents/. Source code is the workers' job.
+1. Read AGENTS.md, the glossary (`GLOSSARY.md`, `GLOSSARY-MAP.md` or `CONTEXT.md`), docs/adr/
+   and docs/agents/. Source code is the workers' job.
 2. Start the handoff file (section 6) and note the run or thread ids in it right away.
 3. Work out the **frontier**: open `ready-for-agent` tickets with no open blockers (GitHub:
    `gh api repos/<owner>/<repo>/issues/<n>/dependencies/blocked_by`). Size each (section 1).
@@ -134,15 +138,19 @@ screenshot and runs each tap, settle and read as one shell call (host map).
 
 ## 5. Working a dispatched task
 
-1. Do only the task. Read the issue and its "Decided in" issues, CONTEXT.md, the relevant
-   ADRs and AGENTS.md.
+1. Do only the task. Read the issue and its "Decided in" issues, the glossary (`GLOSSARY.md`,
+   `GLOSSARY-MAP.md` or `CONTEXT.md`), the relevant ADRs and AGENTS.md.
 2. Bring in helpers only when the size calls for it (sections 1–3), naming their model.
-3. Build it, add tests to the existing harness, run the project's check and type-check
-   commands. UI verification goes to a QA helper; you get back the verdict.
+3. Build it and add tests to the existing harness. While building, run only the tests the
+   change affects: the touched files' tests, their package's suite, or the runner's own mode
+   (`vitest related <files>`, `jest --findRelatedTests <files>`, `pytest <paths>`,
+   `go test ./<pkg>/...`), plus the project's lint and type-check. The full suite is slow:
+   leave it to CI on the PR, or run it once just before opening the PR when the project has
+   no CI. UI verification goes to a QA helper; you get back the verdict.
 4. If the task is bigger or harder than briefed, tell the coordinator what you learned. Two
    compactions on one ticket is that signal: write a short handoff note in the worktree and
    ask the coordinator to split the ticket or start a fresh worker from it.
-5. Ask only what the issue, CONTEXT.md and ADRs leave open, batched into one question (Orca:
+5. Ask only what the issue, the glossary and ADRs leave open, batched into one question (Orca:
    `orca orchestration ask`; T3: end your result with it).
 6. Open one PR (`pr` skill): `Closes #<n>`, acceptance criteria ticked. Merging is the user's.
 7. Finish with a three-sentence summary plus the PR link, detail in a report file.
