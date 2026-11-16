@@ -29,11 +29,14 @@ npx skills add dancorreia-swe/skills -g -y   # install all, globally
 npx skills update -g -y                      # update
 ```
 
-Then read the skill's [SETUP.md](skills/coordinating/SETUP.md) to pick your models and,
-optionally, turn on the hooks and add the suggested global instructions.
+Then ask your agent to **"set up the coordinating skill"**. The `coordinating-setup` skill
+picks your models, installs the guard hooks for Claude Code and Codex, and adds the
+global instructions, showing every change first. Manual route:
+[SETUP.md](skills/coordinating/SETUP.md).
 
 ## Skills
 
 | Skill | What it is for |
 |---|---|
 | [`coordinating`](skills/coordinating/SKILL.md) | Running work across agents in Orca or T3 Code: sizing a task, picking a Claude or Codex model and effort per tier, briefing helpers, waiting without polling, handoffs, decisions, and landing PRs. |
+| [`coordinating-setup`](skills/coordinating-setup/SKILL.md) | Installs, checks or removes `coordinating`'s hooks and global instructions for Claude Code and Codex, with a dry run and backups. |

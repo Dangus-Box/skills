@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 # Sourced by delegate-model-guard.sh and orca-model-guard.sh; not a hook itself.
-# Reads the model tiers from ../models.yaml, the skill folder this sits in (plain block YAML,
-# so grep is enough). MODEL_TIERS_FILE overrides the path.
+# Reads the model tiers (plain block YAML, so grep is enough) from the first that exists:
+# $MODEL_TIERS_FILE, the user's override ~/.config/coordinating/models.yaml (survives
+# `npx skills update`), then ../models.yaml in the skill folder this sits in.
 
-MODEL_TIERS_FILE=${MODEL_TIERS_FILE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/models.yaml}
+if [ -z "${MODEL_TIERS_FILE:-}" ]; then
+  MODEL_TIERS_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/coordinating/models.yaml"
+  [ -r "$MODEL_TIERS_FILE" ] ||
+    MODEL_TIERS_FILE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/models.yaml"
+fi
 
 # Every id under a `model:` key (tiers and extra_allowed), one per line. Empty if no file.
 allowed_models() {

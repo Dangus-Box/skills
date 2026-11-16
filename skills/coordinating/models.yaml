@@ -6,6 +6,9 @@
 #
 # Keep it plain block YAML: the guards read `model:` lines with grep, not a YAML parser.
 # Ids: T3 `orchestrator_capabilities`, or `orca orchestration worker-start --help`.
+#
+# Don't edit this copy: `npx skills update` overwrites it. Copy it to
+# ~/.config/coordinating/models.yaml and edit that; agents and guards read it first.
 
 tiers:
   light:

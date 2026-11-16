@@ -41,7 +41,8 @@ the same check failing twice, or the task proving bigger.
 
 Name the model and effort on every launch: an unnamed child inherits its parent's, so a
 heavy coordinator quietly spawns heavy children. The tiers live in
-[models.yaml](models.yaml), with a Claude and a Codex model for each; read it now. With the
+[models.yaml](models.yaml), with a Claude and a Codex model for each; read it now
+(`~/.config/coordinating/models.yaml` replaces it when present: the user's own picks). With the
 optional guard hooks installed ([SETUP.md](SETUP.md)), a delegate or Orca launch whose model
 is not listed there, or that names no effort, is denied.
 

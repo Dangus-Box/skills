@@ -1,5 +1,10 @@
 # Setup
 
+**Easiest:** ask your agent to "set up the coordinating skill". The `coordinating-setup`
+skill checks what's in place, asks about models, shows the changes, then installs the
+hooks and instructions below with a tested script (`--check`, `--dry-run`,
+`--uninstall`). The rest of this page is the manual route.
+
 The skill works on its own. Two optional extras make it stricter: guard hooks, and a
 few lines in your global instructions. Paths assume a global install
 (`npx skills add <owner>/skills -g`), which puts this folder at
@@ -7,7 +12,8 @@ few lines in your global instructions. Paths assume a global install
 
 ## 1. Pick your models
 
-Edit [models.yaml](models.yaml): one Claude and one Codex model per tier (Light, Mid,
+Copy [models.yaml](models.yaml) to `~/.config/coordinating/models.yaml` and edit the copy
+(updates overwrite the installed one): one Claude and one Codex model per tier (Light, Mid,
 Heavy), each with an effort. Use ids your hosts accept (T3: `orchestrator_capabilities`;
 Orca: `orca orchestration worker-start --help`). Keep it plain block YAML; the hooks read
 it with grep. To allow another id outside the tiers, add it under `extra_allowed` as
