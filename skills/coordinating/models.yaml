@@ -15,10 +15,10 @@ tiers:
     use_for: XS work, summarising logs or CI, mechanical sweeps, re-checks, re-reviews
     claude:
       model: claude-haiku-5-5
-      effort: low
+      effort: high
     codex:
       model: gpt-6-luna
-      effort: low
+      effort: high
 
   mid: # the default
     use_for: S/M building, QA, tests, design-system work, routine review

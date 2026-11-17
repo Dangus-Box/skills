@@ -90,7 +90,7 @@ Every helper launch names a model and an effort. Defaults live in
 
 | Tier | Claude | Codex | For |
 |---|---|---|---|
-| **Light** | Haiku · low | `gpt-6-luna` · low | XS work, log and CI summaries, sweeps, re-checks |
+| **Light** | Haiku · high | `gpt-6-luna` · high | XS work, log and CI summaries, sweeps, re-checks |
 | **Mid** (default) | Sonnet · medium | `gpt-6.1-sol` · medium | S/M building, QA, tests, routine review |
 | **Heavy** (ceiling) | Opus · high | `gpt-6.1-sol` · high | Coordinating, planning, diagnosis, L building, Risky review |
 

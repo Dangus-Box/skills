@@ -48,7 +48,7 @@ is not listed there, or that names no effort, is denied.
 
 | Tier | Claude | Codex | For |
 |---|---|---|---|
-| **Light** | Haiku, low | `gpt-6-luna`, low | XS work, summarising logs or CI, mechanical sweeps, re-checks, re-reviews. |
+| **Light** | Haiku, high | `gpt-6-luna`, high | XS work, summarising logs or CI, mechanical sweeps, re-checks, re-reviews. |
 | **Mid** (default) | Sonnet, medium | `gpt-6.1-sol`, medium | S/M building, QA, tests, design-system work, routine review. |
 | **Heavy** | Opus, high | `gpt-6.1-sol`, high | Coordinating, planning, strategy, advice, diagnosis, L building, review of Risky changes. |
 
