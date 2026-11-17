@@ -5,6 +5,20 @@ while staying flexible about the ADE (agentic development environment, such as
 [Orca](https://github.com/stablyai/orca) or [T3 Code](https://github.com/pingdotgg/t3code)),
 spending tokens carefully, and mixing providers (Claude and Codex) in the same run.
 
+**Just want it running?** Jump to [Install](#install).
+
+## Contents
+
+- [Principles](#principles): the four ideas behind the skills
+- [How it works](#how-it-works)
+  - [One task: size it, then give it a crew](#one-task-size-it-then-give-it-a-crew)
+  - [A coordinator's run: waves, not polling](#a-coordinators-run-waves-not-polling)
+  - [Handoff or compaction](#handoff-or-compaction)
+  - [Model tiers](#model-tiers): a Claude and a Codex model per tier
+  - [Roles](#roles): who to call, on which tier, and what comes back
+- [Install](#install): two commands, then ask your agent to set it up
+- [Skills](#skills)
+
 ## Principles
 
 - **Proficiency.** Size each task first, then give it the right crew: one agent for small work;
@@ -15,7 +29,7 @@ spending tokens carefully, and mixing providers (Claude and Codex) in the same r
   another host only needs a new map.
 - **Token efficiency.** Smaller models by default and step up only on evidence. The
   coordinator waits for a wake-up instead of polling, keeps diffs and logs out of its own
-  context, and hands off to a fresh session instead of compacting.
+  context, and hands off to a fresh session when a summary would lose too much.
 - **Multi-provider.** Every tier has a Claude and a Codex model in one shared
   `models.yaml`. The other family is the second opinion. Optional hooks deny any launch that
   names no model, an unlisted model, or no effort.
@@ -53,9 +67,20 @@ flowchart LR
     V -.->|"a choice only the user can make"| D["Decisions file<br/>Q1…Qn with defaults"]
 ```
 
-The coordinator reads specs, not source; workers read the code. It hands off to a fresh
-session at ~250k tokens (Claude) or ~190k (Codex), 25 orchestration rounds, or a phase end,
-instead of compacting.
+The coordinator reads specs, not source; workers read the code.
+
+### Handoff or compaction
+
+At ~250k tokens (Claude) or ~190k (Codex), 25 orchestration rounds, or a phase end, an agent
+chooses: hand off to a fresh session through a handoff file, or keep going and let it compact.
+When unsure, it hands off: a short file and a fresh read cost less than a lossy summary.
+
+| Hand off when any holds | Let it compact only when all hold |
+|---|---|
+| Coordinating, or a phase just ended | One agent, one task, a few steps from done |
+| Already compacted once this session | First compaction |
+| Context full of wrong turns, or a different model next | On-track context, same model finishes |
+| Work must outlive the session | It ends in this session |
 
 ### Model tiers
 

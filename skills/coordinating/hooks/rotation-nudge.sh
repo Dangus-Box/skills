@@ -48,6 +48,6 @@ if [ "$rounds" -ge "$limit_r" ]; then
 fi
 echo "$rounds $tok_band $round_band" > "$f"
 [ -z "$msg" ] && exit 0
-jq -n --arg c "Rotation nudge: $msg. Rotate, don't compact: finish the current step, write the handoff file (path and sections: coordinating skill section 6), then launch the successor session yourself with the section 6 pointer (host map, New owner), reply with its link, and stop." \
+jq -n --arg c "Rotation nudge: $msg. Hand off or compact? Decide now by the coordinating skill's section 6 table: a coordinator, a phase end, a second compaction, a context full of wrong turns, or a different model next means hand off; one agent a few steps from done, on its first compaction, may keep going (write what a summary must not lose to a notes file first). To hand off: finish the current step, write the handoff file (path and sections: section 6), launch the successor yourself with the section 6 pointer (host map, New owner), reply with its link, and stop." \
   '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$c}}'
 exit 0
