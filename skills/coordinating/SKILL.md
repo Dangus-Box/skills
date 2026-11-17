@@ -157,14 +157,30 @@ screenshot and runs each tap, settle and read as one shell call (host map).
    (host map, "PR opened", "CI and reviews"). Merging is the user's.
 7. Finish with a three-sentence summary plus the PR link, detail in a report file.
 
-## 6. Handoff
+## 6. Handoff or compaction
 
-Rotate, don't compact. At the first of these, write or update this file, then stop:
-~250k tokens of context (Claude) or ~190k (Codex), any auto-compact warning, 25
-orchestration rounds (`orca orchestration check` plus `delegate_task` calls), or a phase end
-(plan → build → verify, a wave boundary). Numbers in your global instructions win. The
-optional rotation hook ([SETUP.md](SETUP.md)) reminds you when you reach the token or round
-limits.
+Check at the first of: ~250k tokens of context (Claude) or ~190k (Codex), any auto-compact
+warning, 25 orchestration rounds (`orca orchestration check`, `delegate_task` and `t3 thread
+start|send` calls), or a phase end (plan → build → verify, a wave boundary). Numbers in your
+global instructions win. The optional rotation hook ([SETUP.md](SETUP.md)) reminds you at the
+token and round limits. Then choose:
+
+| Hand off (this file, then a fresh session) when **any** holds | Keep going and let it compact only when **all** hold |
+|---|---|
+| You coordinate: a run's state has to live on disk anyway. | One agent on one task, not a coordinator. |
+| A phase just ended: the cut is clean and the state is already written. | A few steps from done; a handoff would cost more than finishing. |
+| This session already compacted once: a second summary summarises a summary. | No compaction yet in this session. |
+| The context is full of wrong turns or dropped approaches a summary would carry forward. | The context is mostly on-track work. |
+| The next stretch needs another tier or family. | The same model should finish it. |
+| The work must outlive the session (usage limit, end of day, another machine). | It ends in this session. |
+
+- Before a compaction, write what a summary must not lose (the current hypothesis, the
+  failing test, files touched, decisions made) to a notes file in the worktree, and re-read it
+  right after.
+- When unsure, hand off: it costs one short file and a fresh read; a lossy summary costs a
+  wrong turn later.
+
+To hand off, write or update this file, then stop:
 
 - Path: `~/.<project>-coordinator/HANDOFF.md` for a coordinator,
   `~/.<project>-handoffs/<topic>.md` otherwise. Never the session scratchpad (it's deleted).
