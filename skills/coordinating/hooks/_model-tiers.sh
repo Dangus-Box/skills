@@ -18,7 +18,7 @@ allowed_models() {
     sort -u
 }
 
-# "light: Claude claude-haiku-5-5/high, Codex gpt-6-luna/low; mid: ..." for deny messages.
+# "light: Claude claude-haiku-5-5/high, Codex gpt-6-luna/high; mid: ..." for deny messages.
 tiers_summary() {
   [ -r "$MODEL_TIERS_FILE" ] || return 0
   awk '
