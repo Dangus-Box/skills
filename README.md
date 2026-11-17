@@ -96,7 +96,7 @@ for a few lines back, with detail in a file, so the coordinator's context stays 
 Works with Claude Code, Codex and other agents that read `~/.agents/skills`.
 
 ```sh
-npx skills add Dangus-Box/skills -g -y       # install all, globally
+npx skills add dangus-box/skills -g -y       # install all, globally
 npx skills update -g -y                      # update
 ```
 
