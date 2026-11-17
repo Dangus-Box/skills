@@ -1,6 +1,6 @@
 # skills
 
-My set of skills for doing agentic work well: getting real results from coding agents
+Our set of skills for doing agentic work well: getting real results from coding agents
 while staying flexible about the ADE (agentic development environment, such as
 [Orca](https://github.com/stablyai/orca) or [T3 Code](https://github.com/pingdotgg/t3code)),
 spending tokens carefully, and mixing providers (Claude and Codex) in the same run.
@@ -25,7 +25,7 @@ spending tokens carefully, and mixing providers (Claude and Codex) in the same r
 Works with Claude Code, Codex and other agents that read `~/.agents/skills`.
 
 ```sh
-npx skills add dancorreia-swe/skills -g -y   # install all, globally
+npx skills add Dangus-Box/skills -g -y       # install all, globally
 npx skills update -g -y                      # update
 ```
 
