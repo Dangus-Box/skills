@@ -20,6 +20,77 @@ spending tokens carefully, and mixing providers (Claude and Codex) in the same r
   `models.yaml`. The other family is the second opinion. Optional hooks deny any launch that
   names no model, an unlisted model, or no effort.
 
+## How it works
+
+### One task: size it, then give it a crew
+
+Smaller is the default; a task steps up a size only on evidence (the same check failing
+twice, or the task proving bigger).
+
+```mermaid
+flowchart TD
+    T["Task or ticket"] --> S{"Size it"}
+    S -->|"XS: typo, config, bump"| XS["One agent · Light"]
+    S -->|"S: clear, one area"| SM["One agent · Mid<br/>checks its own work"]
+    S -->|"M: several files or a spec gap"| MP["Planner"] --> MB["Builder"] --> MQ["QA"]
+    S -->|"L: cross-cutting, new feature"| LP["Planner splits it"] --> LB["Builders + Designer"] --> LR["Reviewer per PR"]
+    S -->|"Bug, cause unknown"| DG["Diagnoser<br/>reproduce first"] --> DB["Builder"]
+    RK["Risky: auth, payments,<br/>migrations, secrets"] -.->|"adds to any size"| ADV["Advisor before building<br/>second-family reviewer after"]
+    XS & SM & MQ & LR & DB --> PR["One PR per ticket<br/>affected tests pass, full suite in CI"]
+    PR --> U(["The user merges"])
+```
+
+### A coordinator's run: waves, not polling
+
+```mermaid
+flowchart LR
+    F["Frontier<br/>ready tickets, no blockers"] --> W["Wave<br/>up to 5 workers,<br/>one worktree each"]
+    W --> I["Idle until woken<br/>no sleep, no polling"]
+    I --> V["Verdicts and PR links<br/>back as short summaries"]
+    V --> B{"Wave boundary"}
+    B -->|"report, ask once"| M(["The user merges"])
+    B --> H["Handoff file"] --> N["Fresh coordinator"] --> F
+    V -.->|"a choice only the user can make"| D["Decisions file<br/>Q1…Qn with defaults"]
+```
+
+The coordinator reads specs, not source; workers read the code. It hands off to a fresh
+session at ~250k tokens (Claude) or ~190k (Codex), 25 orchestration rounds, or a phase end,
+instead of compacting.
+
+### Model tiers
+
+Every helper launch names a model and an effort. Defaults live in
+[`models.yaml`](skills/coordinating/models.yaml); your own picks go in
+`~/.config/coordinating/models.yaml`.
+
+| Tier | Claude | Codex | For |
+|---|---|---|---|
+| **Light** | Haiku · low | `gpt-6-luna` · low | XS work, log and CI summaries, sweeps, re-checks |
+| **Mid** (default) | Sonnet · medium | `gpt-6.1-sol` · medium | S/M building, QA, tests, routine review |
+| **Heavy** (ceiling) | Opus · high | `gpt-6.1-sol` · high | Coordinating, planning, diagnosis, L building, Risky review |
+
+Helpers run on the coordinator's own family. The **second opinion** is the other family:
+Claude coordinating → Codex reviews, and the reverse.
+
+### Roles
+
+Most tasks need none of these. A helper is a subagent by default, or a separate worker or
+thread when it needs its own worktree, the other family, or to outlive the session.
+
+| Role | Call it when | Tier | Hands back |
+|---|---|---|---|
+| **Builder** | Something needs building | By size | The PR and a short summary |
+| **Planner** | M or L work, or the path isn't obvious (read-only) | Heavy | One-page plan: files, steps, tests, risks; for L, the split |
+| **Strategist** | Ordering a backlog or cutting scope | Heavy | The order and the cuts; open choices as decisions |
+| **Designer** | New or changed UI | Mid · Heavy for a new pattern | UI spec for empty, loading, error and success, or a prototype |
+| **QA** | Acceptance needs a running app, device or suite | Mid · Light for re-checks | Pass/fail per criterion, with evidence |
+| **Advisor** | A Risky or ADR-level choice, or a builder stuck twice | Heavy or second family | The pick, why, and what would change it |
+| **Reviewer** | A PR worth a second look; always for L or Risky | Mid · Heavy or second family when Risky | Findings by severity, then approve or changes-needed |
+| **Diagnoser** | A bug with an unknown cause | Heavy | Root cause, a failing test, a suggested fix |
+
+Every brief is self-contained (a helper sees none of the coordinator's history) and asks
+for a few lines back, with detail in a file, so the coordinator's context stays small.
+
 ## Install
 
 Works with Claude Code, Codex and other agents that read `~/.agents/skills`.
