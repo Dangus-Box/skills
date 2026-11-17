@@ -38,5 +38,5 @@ global instructions, showing every change first. Manual route:
 
 | Skill | What it is for |
 |---|---|
+| [`coordinating-setup`](skills/coordinating-setup/SKILL.md) | Start here. Installs, checks or removes `coordinating`'s hooks and global instructions for Claude Code and Codex, with a dry run and backups. |
 | [`coordinating`](skills/coordinating/SKILL.md) | Running work across agents in Orca or T3 Code: sizing a task, picking a Claude or Codex model and effort per tier, briefing helpers, waiting without polling, handoffs, decisions, and landing PRs. |
-| [`coordinating-setup`](skills/coordinating-setup/SKILL.md) | Installs, checks or removes `coordinating`'s hooks and global instructions for Claude Code and Codex, with a dry run and backups. |
