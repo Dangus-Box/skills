@@ -26,7 +26,7 @@ They need `bash` and `jq`. All three take the same input in Claude Code and Code
 | Hook | Event, matcher | What it does | Off switch |
 |---|---|---|---|
 | `hooks/delegate-model-guard.sh` | PreToolUse, `mcp__t3[-_]code__delegate_task` | Denies a T3 delegation whose model is missing or not in models.yaml, or that names no effort. | `DELEGATE_MODEL_GUARD=0` |
-| `hooks/orca-model-guard.sh` | PreToolUse, `Bash` | The same for Orca `worker-start`, `worktree create` and `agent launch` of claude/codex. | `ORCA_MODEL_GUARD=0` |
+| `hooks/orca-model-guard.sh` | PreToolUse, `Bash` | The same for shell launches: Orca `worker-start`, `worktree create` and `agent launch` of claude/codex, and `t3 thread start`. | `ORCA_MODEL_GUARD=0` |
 | `hooks/rotation-nudge.sh` | PostToolUse, `*` | Reminds the main agent to write its handoff and rotate at ~250k tokens (Claude) or ~190k (Codex), and at 25 orchestration rounds. | `ROTATION_NUDGE=0`; limits: `ROTATE_TOKENS`, `ROTATE_ROUNDS` |
 
 `hooks/_model-tiers.sh` is a helper the two guards source; it is not a hook. Without

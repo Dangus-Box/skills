@@ -46,7 +46,7 @@ Needs `bash` and `jq`, and the `coordinating` skill installed next to this one
 | Piece | Where | Effect |
 |---|---|---|
 | `delegate-model-guard` | PreToolUse hook, T3 `delegate_task` | Denies a delegation with no model, a model not in models.yaml, or no effort. |
-| `orca-model-guard` | PreToolUse hook, `Bash` | The same for Orca launches of claude/codex agents. |
+| `orca-model-guard` | PreToolUse hook, `Bash` | The same for shell launches: Orca claude/codex agents and `t3 thread start`. |
 | `rotation-nudge` | PostToolUse hook, all tools | Reminds the main agent to hand off at ~250k tokens (Claude) or ~190k (Codex), or 25 orchestration rounds. |
 | Codex hooks switch | `[features] hooks = true` in `~/.codex/config.toml` | Codex runs hooks only with it. |
 | Instructions block | `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, between `coordinating-setup:begin/end` markers | Agents load the skill before spawning helpers, rotate instead of compacting, and may start their own successor thread. |

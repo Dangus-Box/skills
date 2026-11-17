@@ -101,8 +101,8 @@ Every brief is self-contained, because a child sees none of your history:
 1. Read AGENTS.md, the glossary (`GLOSSARY.md`, `GLOSSARY-MAP.md` or `CONTEXT.md`), docs/adr/
    and docs/agents/. Source code is the workers' job.
 2. Start the handoff file (section 6) and note the run or thread ids in it right away.
-3. Work out the **frontier**: open `ready-for-agent` tickets with no open blockers (GitHub:
-   `gh api repos/<owner>/<repo>/issues/<n>/dependencies/blocked_by`). Size each (section 1).
+3. Work out the **frontier**: open `ready-for-agent` tickets with no open blockers (host
+   map, "Tickets"). Size each (section 1).
 4. Raise anything that needs the user (`ready-for-human`, vendor/legal/hosting choices) at once
    as a section 7 brief, and keep it out of the wave.
 
@@ -118,7 +118,7 @@ Every brief is self-contained, because a child sees none of your history:
   map). Read messages once per wake, process all of them, and send every reply, release and
   ack in one chained call.
 - Every check runs on a wake: no `sleep`, `until` or `for` loops, and no status check
-  without one. CI: `gh pr checks <n> --watch` in a background shell call.
+  without one. CI and reviews: the host map's PR watch.
 - A worker reporting the task is bigger than briefed gets a model step up or a helper, not
   another attempt on the same tier.
 - Reviews come back as a reviewer's verdict; the coordinator keeps diffs and logs out of its
@@ -139,7 +139,8 @@ screenshot and runs each tap, settle and read as one shell call (host map).
 ## 5. Working a dispatched task
 
 1. Do only the task. Read the issue and its "Decided in" issues, the glossary (`GLOSSARY.md`,
-   `GLOSSARY-MAP.md` or `CONTEXT.md`), the relevant ADRs and AGENTS.md.
+   `GLOSSARY-MAP.md` or `CONTEXT.md`), the relevant ADRs and AGENTS.md. Link the ticket and
+   mark it started (host map, "Working a ticket").
 2. Bring in helpers only when the size calls for it (sections 1–3), naming their model.
 3. Build it and add tests to the existing harness. While building, run only the tests the
    change affects: the touched files' tests, their package's suite, or the runner's own mode
@@ -152,7 +153,8 @@ screenshot and runs each tap, settle and read as one shell call (host map).
    ask the coordinator to split the ticket or start a fresh worker from it.
 5. Ask only what the issue, the glossary and ADRs leave open, batched into one question (Orca:
    `orca orchestration ask`; T3: end your result with it).
-6. Open one PR (`pr` skill): `Closes #<n>`, acceptance criteria ticked. Merging is the user's.
+6. Open one PR (`pr` skill): `Closes #<n>`, acceptance criteria ticked; link and watch it
+   (host map, "PR opened", "CI and reviews"). Merging is the user's.
 7. Finish with a three-sentence summary plus the PR link, detail in a report file.
 
 ## 6. Handoff
