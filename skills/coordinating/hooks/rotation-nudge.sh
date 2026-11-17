@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # PostToolUse(*): nudges the main agent to write its handoff and rotate (coordinating skill, section 6).
 # Fires once when context reaches ROTATE_TOKENS (default 250000; 190000 for Codex, whose window is ~258k),
-# then every further 20k, and once at ROTATE_ROUNDS orchestration rounds (default 25: `orca orchestration
-# check` calls plus delegate_task calls), then every further 10. Main agent only. ROTATION_NUDGE=0 disables.
+# then every further 20k, and once at ROTATE_ROUNDS orchestration rounds (default 25: delegate_task calls,
+# `orca orchestration check`, and `t3 thread start|send` run from a shell), then every further 10.
+# Main agent only. ROTATION_NUDGE=0 disables.
 set -u
 input=$(cat)
 [ "${ROTATION_NUDGE:-1}" = "0" ] && exit 0
@@ -13,8 +14,12 @@ f="${TMPDIR:-/tmp}/rotation-nudge-${sid}"
 
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 cmd=$(printf '%s' "$input" | jq -r '.tool_input | if type == "object" then (.command // .cmd // .input // "") else (. // "") end | if type == "array" then join(" ") else tostring end' 2>/dev/null)
-if [[ $tool =~ ^mcp__t3[-_]code__delegate_task$ ]] ||
-   { [ "$tool" = "Bash" ] && printf '%s' "$cmd" | grep -Eq 'orca[[:space:]]+orchestration[[:space:]]+check'; }; then
+# A shell command counts when it runs one of these (not when text only mentions it).
+runs_round() {
+  printf '%s\n' "$cmd" | tr ';&|()`' '\n' | grep -Eq \
+    "^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*((env|command|exec|nohup)[[:space:]]+)*([^[:space:]]*/)?(orca[[:space:]]+orchestration[[:space:]]+check|t3[[:space:]]+thread[[:space:]]+(start|send))([[:space:]]|$)"
+}
+if [[ $tool =~ ^mcp__t3[-_]code__delegate_task$ ]] || { [ "$tool" = "Bash" ] && runs_round; }; then
   rounds=$((rounds + 1))
 fi
 

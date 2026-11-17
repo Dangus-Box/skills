@@ -203,6 +203,10 @@ limits.
 2. **Fix**: a coordinator dispatches builders (section 4).
 3. **Re-verify**: a Light QA pass confirms each fix on staging and closes the issue, or
    reopens it with evidence.
+4. **Recurring** (when the user asks for one): schedule step 1 as a Light QA run (host map,
+   "Recurring QA sweep"). Its prompt is self-contained: staging URL, the flows to cover, the
+   issue format above, and "file new defects only; comment on an open issue instead of
+   filing a duplicate". It files issues and stops; fixing stays a coordinator's call.
 
 ## Standing preferences
 

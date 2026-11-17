@@ -18,3 +18,4 @@ Exact syntax: `orca skills get orchestration` (coordination) and the `orca-cli` 
 | T3 threads from Orca | Only when the user names T3: `t3 thread start` with `--provider`, `--model` and `--option effort=…` (references/t3.md, "From a shell"). |
 | New owner | `orca-cli`: new worktree or terminal with `--agent` set to your own family (`claude` or `codex`) and your own model, prompt = the section 6 pointer. |
 | Remove merged worktree | `orca worktree rm` |
+| Recurring QA sweep | `orca automations list` first; then `orca automations create --name qa-sweep --trigger weekdays --time 07:00 --provider <agent> --prompt <sweep prompt> --fresh-session` (`--help` for the model and repo options). |
